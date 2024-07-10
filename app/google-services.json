@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "514389845388",
+    "project_id": "personal-e-commerce-project",
+    "storage_bucket": "personal-e-commerce-project.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:514389845388:android:ae437bc8ee375aa717a2a9",
+        "android_client_info": {
+          "package_name": "com.task.ecommercebluefunder"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "514389845388-rg5botbcdg59mpr5sg4lhdvo4vsfsagb.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA65IwZSoTubIaOPQvprI95_7h5-rC-4Gs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "514389845388-rg5botbcdg59mpr5sg4lhdvo4vsfsagb.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

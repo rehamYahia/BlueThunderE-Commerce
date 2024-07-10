@@ -38,47 +38,7 @@ class LoginFragment : Fragment() {
     private lateinit var binding: FragmentLoginBinding
     private val authViewModel : AuthViewModel by viewModels()
     val progressDialog by lazy { ProgressDialog.createProgressDialog(requireActivity()) }
-//    private lateinit var googleSignInClient: GoogleSignInClient
-//    private val RC_SIGN_IN = 9001
 
-//    private val launcher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()){result->
-//        if(result.resultCode== AppCompatActivity.RESULT_OK){
-//            Log.d("rehamResult" , "${result.resultCode}")
-//            val task = GoogleSignIn.getSignedInAccountFromIntent(result.data)
-//            handleSignInResult(task)
-//        }
-//    }
-
-    // ActivityResultLauncher for the sign-in intent
-    private val launcher =
-        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-            if (result.resultCode == AppCompatActivity.RESULT_OK) {
-                val task = GoogleSignIn.getSignedInAccountFromIntent(result.data)
-                handleSignInResult(task)
-            } else {
-                view?.showSnakeBarError(getString(R.string.google_sign_in_field_msg))
-            }
-        }
-
-    private fun loginWithGoogleRequest() {
-        val signInIntent = getGoogleRequestIntent(requireActivity())
-        launcher.launch(signInIntent)
-    }
-
-    private fun handleSignInResult(completedTask: Task<GoogleSignInAccount>) {
-        try {
-            val account = completedTask.getResult(ApiException::class.java)
-            firebaseAuthWithGoogle(account.idToken!!)
-        } catch (e: Exception) {
-            view?.showSnakeBarError(e.message ?: getString(R.string.generic_err_msg))
-            //val msg = e.message ?: getString(R.string.generic_err_msg)
-            //logAuthIssueToCrashlytics(msg, "Google")
-        }
-    }
-
-    private fun firebaseAuthWithGoogle(idToken: String) {
-        authViewModel.loginWithGoogle(idToken)
-    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
     }
@@ -97,13 +57,10 @@ class LoginFragment : Fragment() {
             findNavController().navigate(R.id.action_loginFragment_to_registerFragment)
         }
         binding.googleSigninBtn.setOnClickListener {
-//            loginWithGoogle()
-            loginWithGoogleRequest()
+
         }
         initViewModel()
-//        binding.loginBtn.setOnClickListener {
-//            authViewModel.login()
-//        }
+
         return binding.root
     }
 
@@ -136,49 +93,6 @@ class LoginFragment : Fragment() {
         }
     }
 
-//    private fun handleSignInResult(completedTask: Task<GoogleSignInAccount>){
-//        try{
-//            val account = completedTask.getResult(ApiException::class.java)
-//            firebaseAuthWithGoogle(account.idToken!!)
-//        }catch (e:ApiException){
-//
-//        }
-//    }
 
-//    private fun firebaseAuthWithGoogle(idToken: String) {
-//        val credential = GoogleAuthProvider.getCredential(idToken , null)
-//        FirebaseAuth.getInstance().signInWithCredential(credential)
-//            .addOnCompleteListener { task->
-//                if(task.isSuccessful){
-//                    val email = task.result.user?.email
-//                }
-//            }
-//
-//    }
-
-//    fun loginWithGoogle(){
-//        val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-//            .requestIdToken(BuildConfig.clientServerId)
-//            .requestProfile()
-//            .requestServerAuthCode(BuildConfig.clientServerId)
-//            .build()
-//
-//        googleSignInClient = GoogleSignIn.getClient(requireActivity() , gso)
-//        val signInIntent = googleSignInClient.signInIntent
-//        requireActivity().startActivityForResult(signInIntent , 2)
-////        launcher.launch(signInIntent)
-////        startActivityForResult(signInIntent , RC_SIGN_IN)
-////
-////        val signInRequest = BeginSignInRequest.builder()
-////            .setGoogleIdTokenRequestOptions(
-////                BeginSignInRequest.GoogleIdTokenRequestOptions.builder()
-////                    .setSupported(true)
-////                    // Your server's client ID, not your Android client ID.
-////                    .setServerClientId("514389845388-rg5botbcdg59mpr5sg4lhdvo4vsfsagb.apps.googleusercontent.com")
-////                    // Only show accounts previously used to sign in.
-////                    .setFilterByAuthorizedAccounts(true)
-////                    .build())
-////            .build()
-//    }
 
 }

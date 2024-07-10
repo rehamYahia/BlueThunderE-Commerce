@@ -51,9 +51,6 @@ class AuthRepositoryImp (private val dataStore: DataStore<Preferences> , private
         }
     }
 
-    override suspend fun LoginWithGoogle(idToken: String): Flow<Resources<String>> = login(AuthProvider.GOOGLE) {
-        val credential = GoogleAuthProvider.getCredential(idToken, null)
-        auth.signInWithCredential(credential).await()
-    }
+
 }
 

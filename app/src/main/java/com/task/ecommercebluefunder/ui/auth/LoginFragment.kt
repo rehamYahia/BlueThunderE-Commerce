@@ -1,13 +1,11 @@
 package com.task.ecommercebluefunder.ui.auth
 
+import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.activity.result.contract.ActivityResultContracts
-import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -17,17 +15,13 @@ import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.android.gms.common.SignInButton
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.tasks.Task
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.GoogleAuthProvider
-import com.task.ecommercebluefunder.BuildConfig
 import com.task.ecommercebluefunder.R
 import com.task.ecommercebluefunder.databinding.FragmentLoginBinding
 import com.task.ecommercebluefunder.state_management.Resources
 import com.task.ecommercebluefunder.ui.common.views.ProgressDialog
-import com.task.ecommercebluefunder.utils.getGoogleRequestIntent
-import com.task.ecommercebluefunder.utils.showSnakeBarError
 import com.task.ecommercebluefunder.viewmodel.AuthViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -35,12 +29,22 @@ import kotlinx.coroutines.launch
 @AndroidEntryPoint
 
 class LoginFragment : Fragment() {
+    private lateinit var googleSignInClient: GoogleSignInClient
+    private val RC_SIGN_IN = 9001
     private lateinit var binding: FragmentLoginBinding
     private val authViewModel : AuthViewModel by viewModels()
     val progressDialog by lazy { ProgressDialog.createProgressDialog(requireActivity()) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+            .requestEmail()
+            .build()
+
+        googleSignInClient = GoogleSignIn.getClient(requireContext(), gso)
+
+        // Set up sign-in button
+
     }
 
     override fun onCreateView(
@@ -51,13 +55,11 @@ class LoginFragment : Fragment() {
         binding.loginViewmodel = authViewModel
         binding.lifecycleOwner = viewLifecycleOwner
 
-
-
         binding.registerTv.setOnClickListener {
             findNavController().navigate(R.id.action_loginFragment_to_registerFragment)
         }
         binding.googleSigninBtn.setOnClickListener {
-
+            signIn()
         }
         initViewModel()
 
@@ -88,9 +90,49 @@ class LoginFragment : Fragment() {
                      }
                  }
              }
-
          }
         }
+    }
+
+
+    private fun signIn() {
+        val signInIntent = googleSignInClient.signInIntent
+        startActivityForResult(signInIntent, RC_SIGN_IN)
+    }
+
+    @Deprecated("Deprecated in Java")
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if (requestCode == RC_SIGN_IN) {
+            val task = GoogleSignIn.getSignedInAccountFromIntent(data)
+            handleSignInResult(task)
+        }
+    }
+
+    private fun handleSignInResult(completedTask: Task<GoogleSignInAccount>) {
+        try {
+            val account = completedTask.getResult(ApiException::class.java)
+            updateUI(account)
+        } catch (e: ApiException) {
+            updateUI(null)
+        }
+    }
+
+    private fun updateUI(account: GoogleSignInAccount?) {
+        if (account != null) {
+            val displayName = account.displayName
+            val email = account.email
+            val profilePicUrl = account.photoUrl
+        } else {
+            // Sign-in failed
+        }
+    }
+
+    override fun onStart() {
+        super.onStart()
+        val account = GoogleSignIn.getLastSignedInAccount(requireContext())
+        updateUI(account)
     }
 
 

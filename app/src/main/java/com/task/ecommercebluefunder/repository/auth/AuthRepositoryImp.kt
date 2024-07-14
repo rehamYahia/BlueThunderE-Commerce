@@ -5,14 +5,12 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.GoogleAuthProvider
 import com.task.ecommercebluefunder.constants.DataStoreKey
 import com.task.ecommercebluefunder.state_management.Resources
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.tasks.await
-import javax.inject.Inject
 
 class AuthRepositoryImp (private val dataStore: DataStore<Preferences> , private val auth:FirebaseAuth) :AuthRepository{
     override suspend fun UpdateLoginStatues(loginStatues:Boolean) {

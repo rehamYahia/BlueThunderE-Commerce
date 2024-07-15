@@ -35,6 +35,4 @@
     <meta-data
         android:name="com.google.android.gms.appinvite.automessage"
         android:value="false" />
-
-
 </manifest>

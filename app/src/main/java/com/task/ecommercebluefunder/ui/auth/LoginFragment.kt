@@ -54,7 +54,6 @@ class LoginFragment : Fragment() {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_login, container, false)
         binding.loginViewmodel = authViewModel
         binding.lifecycleOwner = viewLifecycleOwner
-
         binding.registerTv.setOnClickListener {
             findNavController().navigate(R.id.action_loginFragment_to_registerFragment)
         }
@@ -62,7 +61,6 @@ class LoginFragment : Fragment() {
             signIn()
         }
         initViewModel()
-
         return binding.root
     }
 
@@ -81,8 +79,6 @@ class LoginFragment : Fragment() {
                      is Resources.Sucess ->{
                          progressDialog.dismiss()
                          Toast.makeText( requireContext(), "Sucess" +resource.data, Toast.LENGTH_LONG).show()
-
-
                      }
                      is Resources.Error ->{
                          progressDialog.dismiss()
@@ -103,7 +99,6 @@ class LoginFragment : Fragment() {
     @Deprecated("Deprecated in Java")
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-
         if (requestCode == RC_SIGN_IN) {
             val task = GoogleSignIn.getSignedInAccountFromIntent(data)
             handleSignInResult(task)
@@ -134,7 +129,4 @@ class LoginFragment : Fragment() {
         val account = GoogleSignIn.getLastSignedInAccount(requireContext())
         updateUI(account)
     }
-
-
-
 }
